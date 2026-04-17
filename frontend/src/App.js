@@ -1,0 +1,40 @@
+import React, { useState } from "react";
+
+function App() {
+  const [file, setFile] = useState(null);
+  const [link, setLink] = useState("");
+
+  const upload = async () => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("http://localhost:8000/upload/", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    setLink(data.output);
+  };
+
+  return (
+    <div style={{ textAlign: "center", marginTop: 50 }}>
+      <h1>🔥 AI Video Enhancer</h1>
+
+      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+      <br /><br />
+
+      <button onClick={upload}>Enhance</button>
+
+      {link && (
+        <div>
+          <a href={`http://localhost:8000/${link}`} target="_blank">
+            Download Enhanced Video
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
